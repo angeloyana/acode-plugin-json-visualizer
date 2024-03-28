@@ -1,0 +1,16 @@
+{
+  "id": "acode.plugin.json_visualizer",
+  "name": "JSON Visualizer",
+  "main": "dist/main.js",
+  "version": "1.0.1",
+  "readme": "readme.md",
+  "icon": "icon.png",
+  "files": [],
+  "minVersionCode": 289,
+  "price": 0,
+  "author": {
+    "name": "Angelo Yana",
+    "email": "angeloyana.dev@gmail.com",
+    "github": "angeloyana"
+  }
+}
