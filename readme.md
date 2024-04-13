@@ -8,6 +8,16 @@ The JSON Visualizer is a plugin designed to simplify the navigation of complex J
   </summary>
   <details>
     <summary>
+      <strong>1.0.3</strong>
+    </summary>
+    <ul>
+      <li>
+        <code>Copy path</code> now copies the index path to clipboard right away.
+      </li>
+    </ul>
+  </details>
+  <details>
+    <summary>
       <strong>1.0.2</strong>
     </summary>
     <ul>
@@ -45,5 +55,3 @@ There are 2 ways to visualize JSON data:
 ## Limitations
 
 * Can only take the url of an api.
-
-* Must copy the path manually from the [prompt](https://acode.app/plugin-docs/prompt) that will be shown when you click `COPY PATH`.

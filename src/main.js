@@ -3,6 +3,7 @@ import style from './style.scss';
 import Ref from 'html-tag-js/Ref';
 import JSON5 from 'json5';
 
+const { clipboard } = cordova.plugins;
 const { editor } = editorManager;
 const selectionMenu = acode.require('selectionMenu');
 const fileBrowser = acode.require('fileBrowser');
@@ -25,7 +26,8 @@ class JSONVisualizer {
   }
 
   #copyText(text) {
-    prompt('Copy path', text, 'text');
+    const onCopy = () => toast(strings['copied to clipboard']);
+    clipboard.copy(text, onCopy);
   }
 
   visualizeJSON(json) {
