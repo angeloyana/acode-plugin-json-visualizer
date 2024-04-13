@@ -1,6 +1,7 @@
 import plugin from '../plugin.json';
 import style from './style.scss';
 import Ref from 'html-tag-js/Ref';
+import JSON5 from 'json5';
 
 const { editor } = editorManager;
 const selectionMenu = acode.require('selectionMenu');
@@ -165,7 +166,8 @@ class JSONVisualizer {
       }
 
       try {
-        const jsonContent = await fs(source).readFile('json');
+        const rawJSON = await fs(source).readFile('utf-8');
+        const jsonContent = JSON5.parse(rawJSON);
         await this.visualizeJSON(jsonContent);
       } catch (err) {
         toast('Invalid source!');
@@ -177,14 +179,14 @@ class JSONVisualizer {
 
   addSelectionMenu() {
     const exec = () => {
+      let jsonData;
       try {
         const selectedText = editor.getSelectedText();
-        const jsonData = JSON.parse(selectedText);
-        this.visualizeJSON(jsonData);
+        jsonData = JSON5.parse(selectedText);
       } catch (err) {
-        console.error(err);
         toast('Invalid json!');
       }
+      this.visualizeJSON(jsonData);
     };
     selectionMenu.add(
       exec,
