@@ -34,15 +34,17 @@ class JSONVisualizer {
     this.$style = tag('style', { innerHTML: style });
     document.head.appendChild(this.$style);
 
+    this.addCommand();
+    this.addSelectionMenu();
+  }
+
+  #syncSettings() {
     if (appSettings.get(plugin.id)) {
       this.settings = appSettings.get(plugin.id);
     } else {
       appSettings.value[plugin.id] = this.settings;
       appSettings.update(undefined, false);
     }
-
-    this.addCommand();
-    this.addSelectionMenu();
   }
 
   #copyText(text) {
@@ -251,6 +253,8 @@ class JSONVisualizer {
   }
 
   get settingsList() {
+    this.#syncSettings();
+
     return [
       {
         key: 'copyArrayIndent',
