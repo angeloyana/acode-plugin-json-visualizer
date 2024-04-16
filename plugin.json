@@ -2,7 +2,7 @@
   "id": "acode.plugin.json_visualizer",
   "name": "JSON Visualizer",
   "main": "dist/main.js",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "readme": "readme.md",
   "icon": "icon.png",
   "files": [],
