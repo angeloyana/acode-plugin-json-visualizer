@@ -5,6 +5,7 @@ import JSON5 from 'json5';
 
 const { clipboard } = cordova.plugins;
 const { editor } = editorManager;
+const appSettings = acode.require('settings');
 const selectionMenu = acode.require('selectionMenu');
 const fileBrowser = acode.require('fileBrowser');
 const fs = acode.require('fs');
@@ -13,6 +14,18 @@ const select = acode.require('select');
 
 class JSONVisualizer {
   commandName = 'JSON Visualizer';
+  settings = {
+    copyArrayIndent: 0,
+    copyObjectIndent: 2,
+    stringColor: '#DCD67A',
+    numberColor: '#6471D6',
+    arrayColor: '#6B6B6B',
+    objectColor: '#6B6B6B',
+    trueColor: '#6471D6',
+    falseColor: '#D56464',
+    undefinedColor: '#D56464',
+    nullColor: '#D56464'
+  };
 
   async init($page) {
     this.$page = $page;
@@ -21,6 +34,13 @@ class JSONVisualizer {
     this.$style = tag('style', { innerHTML: style });
     document.head.appendChild(this.$style);
 
+    if (appSettings.get(plugin.id)) {
+      this.settings = appSettings.get(plugin.id);
+    } else {
+      appSettings.value[plugin.id] = this.settings;
+      appSettings.update(undefined, false);
+    }
+
     this.addCommand();
     this.addSelectionMenu();
   }
@@ -28,6 +48,17 @@ class JSONVisualizer {
   #copyText(text) {
     const onCopy = () => toast(strings['copied to clipboard']);
     clipboard.copy(text, onCopy);
+  }
+
+  #getValueColor(value) {
+    if (value instanceof Array) return this.settings.arrayColor;
+    if (value instanceof Object) return this.settings.objectColor;
+    if (typeof value === 'string') return this.settings.stringColor;
+    if (typeof value === 'number') return this.settings.numberColor;
+    if (value === true) return this.settings.trueColor;
+    if (value === false) return this.settings.falseColor;
+    if (value === undefined) return this.settings.undefinedColor;
+    if (value === null) return this.settings.nullColor;
   }
 
   visualizeJSON(json) {
@@ -49,6 +80,7 @@ class JSONVisualizer {
         : typeof value;
       const indexPath = prevIndexPath + (isObjArray ? key : `["${key}"]`);
       const indentStyle = { marginLeft: `${indent}rem` };
+      const valueStyle = { color: this.#getValueColor(value) };
 
       let $entry;
       const $options = tag('span', {
@@ -67,9 +99,17 @@ class JSONVisualizer {
           if (pickedOption === 1) {
             let textToCopy;
             if (value instanceof Array) {
-              textToCopy = JSON.stringify(value);
+              textToCopy = JSON.stringify(
+                value,
+                null,
+                this.settings.copyArrayIndent
+              );
             } else if (value instanceof Object) {
-              textToCopy = JSON.stringify(value, null, 2);
+              textToCopy = JSON.stringify(
+                value,
+                null,
+                this.settings.copyObjectIndent
+              );
             } else {
               textToCopy = value;
             }
@@ -88,7 +128,7 @@ class JSONVisualizer {
                   <div className="key">
                     {key}
                     <span className="colon">:</span>
-                    <span className={`value ${valueType}`}>
+                    <span style={valueStyle}>
                       {valueType === 'string' ? `"${value}"` : value}
                     </span>
                   </div>
@@ -113,7 +153,7 @@ class JSONVisualizer {
                   <div className="key">
                     {key}
                     <span className="colon">:</span>
-                    <span className="value object">
+                    <span style={valueStyle}>
                       {value instanceof Array
                         ? `Array (${value.length})`
                         : `Object (${Object.keys(value).length})`}
@@ -151,9 +191,7 @@ class JSONVisualizer {
                   <div className="key">
                     {key}
                     <span className="colon">:</span>
-                    <span className={`value ${valueType}`}>
-                      {String(value)}
-                    </span>
+                    <span style={valueStyle}>{String(value)}</span>
                   </div>
                 </div>
                 <div className="options">{$options}</div>
@@ -212,6 +250,81 @@ class JSONVisualizer {
     );
   }
 
+  get settingsList() {
+    return [
+      {
+        key: 'copyArrayIndent',
+        text: 'Copy value indent (Array)',
+        info: 'Changes copied array indent size',
+        prompt: 'Array indent size',
+        promptType: 'number',
+        value: this.settings.copyArrayIndent
+      },
+      {
+        key: 'copyObjectIndent',
+        text: 'Copy value indent (Object)',
+        info: 'Changes copied object indent size',
+        prompt: 'Object indent size',
+        promptType: 'number',
+        value: this.settings.copyObjectIndent
+      },
+      {
+        key: 'stringColor',
+        text: 'String color',
+        color: true,
+        value: this.settings.stringColor
+      },
+      {
+        key: 'numberColor',
+        text: 'Number color',
+        color: true,
+        value: this.settings.numberColor
+      },
+      {
+        key: 'arrayColor',
+        text: 'Array color',
+        color: true,
+        value: this.settings.arrayColor
+      },
+      {
+        key: 'objectColor',
+        text: 'Object color',
+        color: true,
+        value: this.settings.objectColor
+      },
+      {
+        key: 'trueColor',
+        text: 'True color',
+        color: true,
+        value: this.settings.trueColor
+      },
+      {
+        key: 'falseColor',
+        text: 'False color',
+        color: true,
+        value: this.settings.falseColor
+      },
+      {
+        key: 'undefinedColor',
+        text: 'Undefined color',
+        color: true,
+        value: this.settings.undefinedColor
+      },
+      {
+        key: 'nullColor',
+        text: 'Null color',
+        color: true,
+        value: this.settings.nullColor
+      }
+    ];
+  }
+
+  onSettingsChange(key, value) {
+    this.settings[key] = value;
+    appSettings.value[plugin.id] = this.settings;
+    appSettings.update(undefined, false);
+  }
+
   async destroy() {
     editor.commands.removeCommand(this.commandName);
   }
@@ -220,9 +333,16 @@ class JSONVisualizer {
 if (window.acode) {
   const jsonVisualizer = new JSONVisualizer();
 
-  acode.setPluginInit(plugin.id, async (baseUrl, $page) => {
-    await jsonVisualizer.init($page);
-  });
+  acode.setPluginInit(
+    plugin.id,
+    async (baseUrl, $page) => {
+      await jsonVisualizer.init($page);
+    },
+    {
+      list: jsonVisualizer.settingsList,
+      cb: jsonVisualizer.onSettingsChange.bind(jsonVisualizer)
+    }
+  );
 
   acode.setPluginUnmount(plugin.id, () => {
     jsonVisualizer.destroy();

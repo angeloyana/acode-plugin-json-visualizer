@@ -1,9 +1,5 @@
 $black: #000;
-$blue: #6471d6;
 $gray: #6b6b6b;
-$red: #d56464;
-$white: #fff;
-$yellow: #dcd67a;
 $json-element-padding: 0.5rem;
 
 // Modifiers
@@ -18,28 +14,6 @@ $json-element-padding: 0.5rem;
   }
   .indicator.open::before {
     color: var(--primary-text-color);
-  }
-
-  .value.string {
-    color: $yellow;
-  }
-  .value.number {
-    color: $blue;
-  }
-  .value.object {
-    color: $gray;
-  }
-  .value.true {
-    color: $blue;
-  }
-  .value.false {
-    color: $red;
-  }
-  .value.undefined {
-    color: $red;
-  }
-  .value.null {
-    color: $red;
   }
 
   .dropdown__list--hidden {
