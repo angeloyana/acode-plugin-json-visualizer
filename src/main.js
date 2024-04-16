@@ -23,7 +23,6 @@ class JSONVisualizer {
     objectColor: '#6B6B6B',
     trueColor: '#6471D6',
     falseColor: '#D56464',
-    undefinedColor: '#D56464',
     nullColor: '#D56464'
   };
 
@@ -59,7 +58,6 @@ class JSONVisualizer {
     if (typeof value === 'number') return this.settings.numberColor;
     if (value === true) return this.settings.trueColor;
     if (value === false) return this.settings.falseColor;
-    if (value === undefined) return this.settings.undefinedColor;
     if (value === null) return this.settings.nullColor;
   }
 
@@ -77,7 +75,7 @@ class JSONVisualizer {
 
     Object.entries(obj).forEach(([key, value]) => {
       key = isObjArray ? `[${key}]` : key;
-      const valueType = [true, false, undefined, null].includes(value)
+      const valueType = [true, false, null].includes(value)
         ? value
         : typeof value;
       const indexPath = prevIndexPath + (isObjArray ? key : `["${key}"]`);
@@ -307,12 +305,6 @@ class JSONVisualizer {
         text: 'False color',
         color: true,
         value: this.settings.falseColor
-      },
-      {
-        key: 'undefinedColor',
-        text: 'Undefined color',
-        color: true,
-        value: this.settings.undefinedColor
       },
       {
         key: 'nullColor',
