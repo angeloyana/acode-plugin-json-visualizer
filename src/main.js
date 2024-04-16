@@ -54,11 +54,26 @@ class JSONVisualizer {
       const $options = tag('span', {
         className: 'icon more_vert',
         onclick: async () => {
-          const options = [[0, 'Copy Path']];
+          const options = [
+            [0, 'Copy path'],
+            [1, 'Copy value']
+          ];
           const pickedOption = await select('Options', options);
 
           if (pickedOption === 0) {
             this.#copyText(indexPath);
+          }
+
+          if (pickedOption === 1) {
+            let textToCopy;
+            if (value instanceof Array) {
+              textToCopy = JSON.stringify(value);
+            } else if (value instanceof Object) {
+              textToCopy = JSON.stringify(value, null, 2);
+            } else {
+              textToCopy = value;
+            }
+            this.#copyText(textToCopy);
           }
         }
       });
