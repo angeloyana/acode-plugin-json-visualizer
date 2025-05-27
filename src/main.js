@@ -23,7 +23,7 @@ class JSONVisualizer {
     objectColor: '#6B6B6B',
     trueColor: '#6471D6',
     falseColor: '#D56464',
-    nullColor: '#D56464'
+    nullColor: '#D56464',
   };
 
   async init($page) {
@@ -75,9 +75,7 @@ class JSONVisualizer {
 
     Object.entries(obj).forEach(([key, value]) => {
       key = isObjArray ? `[${key}]` : key;
-      const valueType = [true, false, null].includes(value)
-        ? value
-        : typeof value;
+      const valueType = [true, false, null].includes(value) ? value : typeof value;
       const indexPath = prevIndexPath + (isObjArray ? key : `["${key}"]`);
       const indentStyle = { marginLeft: `${indent}rem` };
       const valueStyle = { color: this.#getValueColor(value) };
@@ -88,7 +86,7 @@ class JSONVisualizer {
         onclick: async () => {
           const options = [
             [0, 'Copy path'],
-            [1, 'Copy value']
+            [1, 'Copy value'],
           ];
           const pickedOption = await select('Options', options);
 
@@ -99,23 +97,15 @@ class JSONVisualizer {
           if (pickedOption === 1) {
             let textToCopy;
             if (value instanceof Array) {
-              textToCopy = JSON.stringify(
-                value,
-                null,
-                this.settings.copyArrayIndent
-              );
+              textToCopy = JSON.stringify(value, null, this.settings.copyArrayIndent);
             } else if (value instanceof Object) {
-              textToCopy = JSON.stringify(
-                value,
-                null,
-                this.settings.copyObjectIndent
-              );
+              textToCopy = JSON.stringify(value, null, this.settings.copyObjectIndent);
             } else {
               textToCopy = value;
             }
             this.#copyText(textToCopy);
           }
-        }
+        },
       });
 
       switch (valueType) {
@@ -128,9 +118,7 @@ class JSONVisualizer {
                   <div className="key">
                     {key}
                     <span className="colon">:</span>
-                    <span style={valueStyle}>
-                      {valueType === 'string' ? `"${value}"` : value}
-                    </span>
+                    <span style={valueStyle}>{valueType === 'string' ? `"${value}"` : value}</span>
                   </div>
                 </div>
                 <div className="options">{$options}</div>
@@ -140,9 +128,7 @@ class JSONVisualizer {
           break;
 
         case 'object':
-          const $indicator = (
-            <span className="icon arrow_right indicator"></span>
-          );
+          const $indicator = <span className="icon arrow_right indicator"></span>;
           const childToggler = new Ref();
 
           const $header = (
@@ -167,7 +153,7 @@ class JSONVisualizer {
 
           const $list = tag('div', {
             className: 'dropdown__list dropdown__list--hidden',
-            children: this.objectToHTML(value, indent + 1, indexPath)
+            children: this.objectToHTML(value, indent + 1, indexPath),
           });
 
           childToggler.el.onclick = () => {
@@ -179,7 +165,7 @@ class JSONVisualizer {
 
           $entry = tag('div', {
             className: 'dropdown',
-            children: [$header, $list]
+            children: [$header, $list],
           });
           break;
 
@@ -216,7 +202,7 @@ class JSONVisualizer {
       } else {
         source = await prompt('API with JSON response', '', 'url', {
           match: /^(https?|file|content):\/\/.+/,
-          placeholder: 'https://'
+          placeholder: 'https://',
         });
       }
 
@@ -260,7 +246,7 @@ class JSONVisualizer {
         info: 'Changes copied array indent size',
         prompt: 'Array indent size',
         promptType: 'number',
-        value: this.settings.copyArrayIndent
+        value: this.settings.copyArrayIndent,
       },
       {
         key: 'copyObjectIndent',
@@ -268,50 +254,50 @@ class JSONVisualizer {
         info: 'Changes copied object indent size',
         prompt: 'Object indent size',
         promptType: 'number',
-        value: this.settings.copyObjectIndent
+        value: this.settings.copyObjectIndent,
       },
       {
         key: 'stringColor',
         text: 'String color',
         color: true,
-        value: this.settings.stringColor
+        value: this.settings.stringColor,
       },
       {
         key: 'numberColor',
         text: 'Number color',
         color: true,
-        value: this.settings.numberColor
+        value: this.settings.numberColor,
       },
       {
         key: 'arrayColor',
         text: 'Array color',
         color: true,
-        value: this.settings.arrayColor
+        value: this.settings.arrayColor,
       },
       {
         key: 'objectColor',
         text: 'Object color',
         color: true,
-        value: this.settings.objectColor
+        value: this.settings.objectColor,
       },
       {
         key: 'trueColor',
         text: 'True color',
         color: true,
-        value: this.settings.trueColor
+        value: this.settings.trueColor,
       },
       {
         key: 'falseColor',
         text: 'False color',
         color: true,
-        value: this.settings.falseColor
+        value: this.settings.falseColor,
       },
       {
         key: 'nullColor',
         text: 'Null color',
         color: true,
-        value: this.settings.nullColor
-      }
+        value: this.settings.nullColor,
+      },
     ];
   }
 
@@ -336,7 +322,7 @@ if (window.acode) {
     },
     {
       list: jsonVisualizer.settingsList,
-      cb: jsonVisualizer.onSettingsChange.bind(jsonVisualizer)
+      cb: jsonVisualizer.onSettingsChange.bind(jsonVisualizer),
     }
   );
 

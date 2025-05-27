@@ -7,7 +7,8 @@
     "dev": "webpack --watch",
     "zip": "node .scripts/zip.js",
     "build": "webpack",
-    "build-release": "webpack --mode production"
+    "build-release": "webpack --mode production",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@babel/cli": "^7.24.1",
@@ -19,6 +20,7 @@
     "html-tag-js": "^1.4.3",
     "jszip": "^3.10.1",
     "postcss-loader": "^8.1.1",
+    "prettier": "^3.5.3",
     "raw-loader": "^4.0.2",
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",

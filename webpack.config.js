@@ -7,12 +7,12 @@ module.exports = (env, argv) => {
   const rules = [
     {
       test: /\.m?js$/,
-      use: ['html-tag-js/jsx/tag-loader', 'babel-loader']
+      use: ['html-tag-js/jsx/tag-loader', 'babel-loader'],
     },
     {
       test: /\.(sa|sc|c)ss$/,
-      use: ['raw-loader', 'postcss-loader', 'sass-loader']
-    }
+      use: ['raw-loader', 'postcss-loader', 'sass-loader'],
+    },
   ];
 
   const build = (compiler) => {
@@ -27,20 +27,20 @@ module.exports = (env, argv) => {
   return {
     mode,
     entry: {
-      main: path.resolve(__dirname, 'src', 'main.js')
+      main: path.resolve(__dirname, 'src', 'main.js'),
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
-      chunkFilename: '[name].js'
+      chunkFilename: '[name].js',
     },
     module: {
-      rules
+      rules,
     },
     plugins: [
       {
-        apply: build
-      }
-    ]
+        apply: build,
+      },
+    ],
   };
 };

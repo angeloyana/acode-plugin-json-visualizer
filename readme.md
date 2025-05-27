@@ -4,11 +4,11 @@ The JSON Visualizer is a plugin designed to simplify the navigation of complex J
 
 ## 🚀 Features
 
-* **Multiple source:** Visualize JSON data from files, API responses, or directly within the code editor.
+- **Multiple source:** Visualize JSON data from files, API responses, or directly within the code editor.
 
-* **Index Path Copying:** Easily copy index paths for specific JSON elements.
+- **Index Path Copying:** Easily copy index paths for specific JSON elements.
 
-* **Hierarchical Structure:** Uses hierarchical view and has collapsible JSON elements making it easier to navigate with.
+- **Hierarchical Structure:** Uses hierarchical view and has collapsible JSON elements making it easier to navigate with.
 
 ## 🛠 Usage
 
@@ -22,4 +22,4 @@ To configure JSON Visualizer settings, go to `Settings > Plugins > JSON Visualiz
 
 ## Limitations
 
-* Can only take the url of an api.
+- Can only take the url of an api.
